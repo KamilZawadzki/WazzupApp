@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">WazzupApp</string>
     <string name="header">Wazzup</string>
+    <string name="shareExtraSubject">"Wysłano z aplikacji WazzupApp"</string>
+    <string name="shareExtraText">Nie bądź łoś, zainstaluj i cyk fuch!</string>
+    <string name="shareChooserText">Udostępnij przez:</string>
+    <string name="LikeGDAK">Polub nas na Facebook</string>
+    <string name="SubWazzup">Subskrybuj Wazzup\'a!</string>
+    <string name="LikeWazzup">Polub Wazzup na Facebook</string>
 </resources>

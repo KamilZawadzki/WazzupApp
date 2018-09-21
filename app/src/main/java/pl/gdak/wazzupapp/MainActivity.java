@@ -12,8 +12,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,9 +35,35 @@ public class MainActivity extends AppCompatActivity {
 
         //ZAINICJUJ MEDIA PLAYER
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oh_shit);
-
         generateSoundPlayingButtonsFromRawDirectoryFiles();
-    }
+
+        ImageButton likeGdakBtn = findViewById(R.id.likeGDAK_img);
+        likeGdakBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("fb://page/244418192888243"));
+                startActivity(browserIntent);
+            }
+        });
+        ImageButton likeWazzup = findViewById(R.id.likeWazzup_img);
+        likeWazzup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("fb://page/804213503040461"));
+                startActivity(browserIntent);
+            }
+        });
+
+        ImageButton subWazzup = findViewById(R.id.subWazzup_img);
+        subWazzup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("http://www.youtube.com/channel/UC1Fv5ATgw8RyX4Cj0xGo1WQ?sub_confirmation=1"));
+                startActivity(browserIntent);
+            }
+        });
+        }
+
 
     public void generateSoundPlayingButtonsFromRawDirectoryFiles() {
         Field[] fields = R.raw.class.getFields();
@@ -45,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
 
             //PlaySound Button
             String btn_name = field.getName().replaceAll("_", " ");
-            Button btn = new Button(this);
-            btn.setText(btn_name);
+            Button soundBtn = new Button(this);
+            soundBtn.setText(btn_name);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                btn.setBackground(getResources().getDrawable(R.drawable.button_shadow));
+                soundBtn.setBackground(getResources().getDrawable(R.drawable.button_shadow));
             }
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT,1);
-            params.setMargins(20, 80, 20, 0);
-            btn.setLayoutParams(params);
+            params.setMargins(40, 80, 40, 0);
+            soundBtn.setLayoutParams(params);
 
 
-            btn.setOnClickListener(new View.OnClickListener() {
+            soundBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Button b = (Button) v;
@@ -69,13 +96,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            //Share Button
-            Button shareButton = new Button(getApplicationContext());
-            //shareButton.setText("Share");
-            shareButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share,0,0,0);
-            LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT,1);
+
+            ImageButton shareButton = new ImageButton(this);
+            shareButton.setImageResource(R.drawable.ic_share);
+
+            LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(600,LinearLayout.LayoutParams.WRAP_CONTENT,1);
             params2.setMargins(40, 80, 40, 0);
             shareButton.setLayoutParams(params2);
+            shareButton.setScaleType(ImageView.ScaleType.CENTER);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 shareButton.setBackground(getResources().getDrawable(R.drawable.button_shadow));
             }
@@ -105,18 +133,18 @@ public class MainActivity extends AppCompatActivity {
                     //Log.i("Raw Asset: ",Environment.getExternalStorageDirectory()+"/sound.mp3".toString());
                     Intent shareAudioIntent = new Intent(Intent.ACTION_SEND);
                     shareAudioIntent.setType("audio/mp3");
-                    shareAudioIntent.putExtra(Intent.EXTRA_TEXT, "Nie bądź łoś, zainstaluj i cyk fuch!");
-                    shareAudioIntent.putExtra(Intent.EXTRA_SUBJECT, "Wysłano z aplikacji WazzupApp");
+                    shareAudioIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.shareExtraText));
+                    shareAudioIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.shareExtraSubject));
                     shareAudioIntent.putExtra(Intent.EXTRA_STREAM,
                             Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/sound.mp3"));
-                    startActivity(Intent.createChooser(shareAudioIntent, "Udostępnij przez:"));
+                    startActivity(Intent.createChooser(shareAudioIntent, getString(R.string.shareChooserText)));
                 }
             });
 
             LinearLayout rootButtonsLayout =  findViewById(R.id.soundbar_rootLinearLayout);
 
             LinearLayout eachHorizontalLayout = new LinearLayout(this,null, R.style.layout_horizontal);
-            eachHorizontalLayout.addView(btn);
+            eachHorizontalLayout.addView(soundBtn);
             eachHorizontalLayout.addView(shareButton);
 
             rootButtonsLayout.addView(eachHorizontalLayout);
@@ -134,5 +162,4 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         mediaPlayer.release();
     }
-
 }
