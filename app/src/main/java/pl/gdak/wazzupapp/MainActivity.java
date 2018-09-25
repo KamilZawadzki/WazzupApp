@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
             //PlaySound Button
             String btn_name = field.getName().replaceAll("_", " ");
-            Button soundBtn = new Button(this);
+            final Button soundBtn = new Button(this);
             soundBtn.setText(btn_name);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 soundBtn.setBackground(getResources().getDrawable(R.drawable.button_shadow));
@@ -111,13 +111,13 @@ public class MainActivity extends AppCompatActivity {
             shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    int resID = getResources().getIdentifier(soundBtn.getText().toString().replaceAll(" ", "_"), "raw", getPackageName());
                     InputStream inputStream;
                     FileOutputStream fileOutputStream;
                     try {
-                        inputStream = getResources().openRawResource(R.raw.oh_shit);
+                        inputStream = getResources().openRawResource(resID);
                         fileOutputStream = new FileOutputStream(
-                                new File(Environment.getExternalStorageDirectory(), "sound.mp3"));
+                                new File(Environment.getExternalStorageDirectory(), "soundx.mp3"));
 
                         byte[] buffer = new byte[1024];
                         int length;
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     shareAudioIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.shareExtraText));
                     shareAudioIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.shareExtraSubject));
                     shareAudioIntent.putExtra(Intent.EXTRA_STREAM,
-                            Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/sound.mp3"));
+                            Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/soundx.mp3"));
                     startActivity(Intent.createChooser(shareAudioIntent, getString(R.string.shareChooserText)));
                 }
             });
@@ -147,14 +147,14 @@ public class MainActivity extends AppCompatActivity {
             eachHorizontalLayout.addView(soundBtn);
             eachHorizontalLayout.addView(shareButton);
 
-            rootButtonsLayout.addView(eachHorizontalLayout);
+            rootButtonsLayout.addView(eachHorizontalLayout,0);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oh_shit_biegne);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oh_shit);
     }
 
     @Override

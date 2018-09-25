@@ -20,98 +20,101 @@
                 android:id="@+id/soundbar_rootLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/PromoSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginBottom="80dp"
+                    android:layout_weight="2"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/likeWazzup_img"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/facebook" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/simplifica"
+                            android:gravity="center"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:text="@string/LikeWazzup"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/subWazzup_img"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
+                            android:layout_gravity="center_vertical|center_horizontal"
+                            android:layout_marginBottom="2.5dp"
+                            android:layout_marginTop="2.5dp"
+                            android:background="@drawable/youtube" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/simplifica"
+                            android:gravity="center"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:text="@string/SubWazzup"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/likeGDAK_img"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/gdak" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:fontFamily="@font/simplifica"
+                            android:gravity="center"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
+                            android:text="@string/LikeGDAK"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/PromoSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/likeWazzup_img"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/facebook" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/simplifica"
-                    android:gravity="center"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:text="@string/LikeWazzup"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/subWazzup_img"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginBottom="2.5dp"
-                    android:layout_marginTop="2.5dp"
-                    android:background="@drawable/youtube" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/simplifica"
-                    android:gravity="center"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:text="@string/SubWazzup"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/likeGDAK_img"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/gdak" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/simplifica"
-                    android:gravity="center"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="3dp"
-                    android:text="@string/LikeGDAK"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
 
     </LinearLayout>
 
