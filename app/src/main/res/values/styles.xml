@@ -7,12 +7,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="layout_horizontal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
 </resources>
