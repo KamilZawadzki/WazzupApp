@@ -3,6 +3,7 @@ package pl.gdak.wazzupapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -73,10 +74,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void generateSoundPlayingButtonsFromRawDirectoryFiles() {
         Field[] fields = R.raw.class.getFields();
+
         for (Field field : fields) {
+            String btn_name = field.getName();
             //Log.i("Raw Asset: ", fields[count].getName());
             ImageButton addToFavoritesButton = new ImageButton(this);
-            addToFavoritesButton.setImageResource(R.drawable.ic_favourite);
+            if(db.isTrackFav(btn_name)){
+                addToFavoritesButton.setImageResource(R.drawable.ic_favourite_full);
+            }else
+            {
+                addToFavoritesButton.setImageResource(R.drawable.ic_favourite);
+            }
 
             LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2);
             params2.setMargins(0, 80, 0, 0);
@@ -90,9 +98,9 @@ public class MainActivity extends AppCompatActivity {
 
 
             //PlaySound Button
-            String btn_name = field.getName().replaceAll("_", " ");
+
             final Button soundBtn = new Button(this);
-            soundBtn.setText(btn_name);
+            soundBtn.setText(btn_name.replaceAll("_", " "));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 soundBtn.setBackground(getResources().getDrawable(R.drawable.button_shadow));
             }
@@ -107,20 +115,18 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     ImageButton imageButton = (ImageButton) v;
                     Drawable drawable = imageButton.getDrawable();
+                    String name = soundBtn.getText().toString().replaceAll(" ", "_");
                     if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.ic_favourite).getConstantState())){
                         Track newFavouriteTrack = new Track();
-                        String name = soundBtn.getText().toString().replaceAll(" ", "_");
                         newFavouriteTrack.setName(name);
                         db.addTrack(newFavouriteTrack);
                         Toast.makeText(getApplicationContext(),"Fav added",Toast.LENGTH_SHORT).show();
                         imageButton.setImageResource(R.drawable.ic_favourite_full);
                     }else
                     {
+                        db.deleteOne(name);
                         imageButton.setImageResource(R.drawable.ic_favourite);
                     }
-
-
-
                 }
             });
 
@@ -132,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                     String buttonText = b.getText().toString();
                     buttonText = buttonText.replaceAll(" ", "_").toLowerCase();
                     int resID = getResources().getIdentifier(buttonText, "raw", getPackageName());
-
                     mediaPlayer.reset();
                     mediaPlayer = MediaPlayer.create(getApplicationContext(), resID);
                     mediaPlayer.start();

@@ -14,9 +14,8 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "WazzApek";
     private static final String TABLE_NAME = "Favourites";
-    private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
-    private static final String[] COLUMNS = {KEY_ID, KEY_NAME};
+    private static final String[] COLUMNS = {KEY_NAME};
 
     public SQLiteDatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -24,8 +23,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATION_TABLE = "CREATE TABLE " + TABLE_NAME + " ( "
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT, " + "name TEXT)";
+        String CREATION_TABLE = "CREATE TABLE " + TABLE_NAME + " ( "+ "name TEXT PRIMARY KEY)";
         db.execSQL(CREATION_TABLE);
     }
 
@@ -36,13 +34,13 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public void deleteOne(Track track) {
+    public void deleteOne(String track) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NAME, "name = ?", new String[]{String.valueOf(track.getName())});
+        db.delete(TABLE_NAME, "name = ?", new String[]{track});
         db.close();
     }
 
-    public Track getTrack(int id) {
+ /*   public Track getTrack(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, // a. table
                 COLUMNS, // b. column names
@@ -59,7 +57,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         Track track = new Track();
         track.setName(cursor.getString(0));
         return track;
-    }
+    }*/
 
     public List<Track> allTracks() {
 
@@ -67,7 +65,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         String query = "SELECT  * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        Track track = null;
+        Track track;
 
         if (cursor.moveToFirst()) {
             do {
@@ -103,5 +101,20 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
         return i;
     }
+    public boolean isTrackFav(String name){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, // a. table
+                COLUMNS, // b. column names
+                " name = ?", // c. selections
+                new String[]{name}, // d. selections args
+                null, // e. group by
+                null, // f. having
+                null, // g. order by
+                null); // h. limit
 
+        if (cursor.moveToFirst())
+            return true;
+        else
+            return false;
+    }
 }
