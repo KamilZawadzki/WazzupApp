@@ -29,12 +29,15 @@ import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
-
+    private SQLiteDatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //zainicjuj baze
+        db = new SQLiteDatabaseHandler(this);
 
         //ZAINICJUJ MEDIA PLAYER
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oh_shit);
@@ -67,13 +70,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
     public void generateSoundPlayingButtonsFromRawDirectoryFiles() {
         Field[] fields = R.raw.class.getFields();
         for (Field field : fields) {
             //Log.i("Raw Asset: ", fields[count].getName());
-
-
             ImageButton addToFavoritesButton = new ImageButton(this);
             addToFavoritesButton.setImageResource(R.drawable.ic_favourite);
 
