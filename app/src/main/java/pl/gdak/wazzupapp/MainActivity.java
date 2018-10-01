@@ -3,6 +3,7 @@ package pl.gdak.wazzupapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -85,14 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 addToFavoritesButton.setBackground(getResources().getDrawable(R.drawable.button_shadow));
             }
 
-            addToFavoritesButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"Fav Added",Toast.LENGTH_SHORT).show();
-                    ImageButton imageButton = (ImageButton) v;
-                    imageButton.setImageResource(R.drawable.ic_favourite_full);
-                }
-            });
+
 
 
             //PlaySound Button
@@ -105,6 +99,31 @@ public class MainActivity extends AppCompatActivity {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
             params.setMargins(40, 80, 40, 0);
             soundBtn.setLayoutParams(params);
+
+
+
+            addToFavoritesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageButton imageButton = (ImageButton) v;
+                    Drawable drawable = imageButton.getDrawable();
+                    if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.ic_favourite).getConstantState())){
+                        Track newFavouriteTrack = new Track();
+                        String name = soundBtn.getText().toString().replaceAll(" ", "_");
+                        newFavouriteTrack.setName(name);
+                        db.addTrack(newFavouriteTrack);
+                        Toast.makeText(getApplicationContext(),"Fav added",Toast.LENGTH_SHORT).show();
+                        imageButton.setImageResource(R.drawable.ic_favourite_full);
+                    }else
+                    {
+                        imageButton.setImageResource(R.drawable.ic_favourite);
+                    }
+
+
+
+                }
+            });
+
 
             soundBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

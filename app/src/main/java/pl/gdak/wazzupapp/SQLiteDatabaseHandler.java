@@ -80,7 +80,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         return tracks;
     }
 
-    public void addPlayer(Track track) {
+    public void addTrack(Track track) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, track.getName());
@@ -89,7 +89,7 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public int updatePlayer(Track player) {
+    public int updateTrack(Track player) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, player.getName());
