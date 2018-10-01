@@ -9,15 +9,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/test1"
+        android:background="@drawable/bg"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/appBanner"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/appbanner"
+            android:scaleType="fitStart"
+            android:elevation="10dp"/>
+
+        <Button
+            android:id="@+id/changeSourceButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FAV/ALL" />
 
         <ScrollView
             android:id="@+id/soundbarScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="none"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
