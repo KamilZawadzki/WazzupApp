@@ -3,7 +3,6 @@ package pl.gdak.wazzupapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -30,11 +29,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private SQLiteDatabaseHandler db;
 
+    private static boolean showFav = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +45,20 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getSupportActionBar()).hide();
+        }
         //zainicjuj baze
         db = new SQLiteDatabaseHandler(this);
+
+        Button changeSourceButtons = findViewById(R.id.changeSourceButtons);
+        changeSourceButtons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFav = !showFav;
+                startActivity(new Intent(getApplicationContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            }
+        });
 
         //ZAINICJUJ MEDIA PLAYER
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oh_shit);
@@ -77,10 +92,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateSoundPlayingButtonsFromRawDirectoryFiles() {
-        Field[] fields = R.raw.class.getFields();
-
-        for (Field field : fields) {
-            String btn_name = field.getName();
+        List<Track> tracks;
+        if(!showFav){
+            Field[] fields = R.raw.class.getFields();
+             tracks = convertFieldsToList(fields);
+        }
+        else{
+            tracks = db.allTracks();
+        }
+        for (Track track : tracks) {
+            String btn_name = track.getName();
             //Log.i("Raw Asset: ", fields[count].getName());
             ImageButton addToFavoritesButton = new ImageButton(this);
             if(db.isTrackFav(btn_name)){
@@ -97,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 addToFavoritesButton.setBackground(getResources().getDrawable(R.drawable.button_shadow));
             }
-
-
-
 
             //PlaySound Button
 
@@ -206,6 +224,16 @@ public class MainActivity extends AppCompatActivity {
 
             rootButtonsLayout.addView(eachHorizontalLayout, 0);
         }
+    }
+
+    private List<Track> convertFieldsToList(Field[] fields) {
+        List<Track> tracks = new ArrayList<>();
+        for(Field field : fields){
+            Track track = new Track();
+            track.setName(field.getName());
+            tracks.add(track);
+        }
+        return tracks;
     }
 
     @Override
