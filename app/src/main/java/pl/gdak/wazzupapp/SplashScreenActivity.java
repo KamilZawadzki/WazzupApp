@@ -1,7 +1,6 @@
 package pl.gdak.wazzupapp;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void onFinish() {
 
 
-                startActivity(new Intent(getApplicationContext(), CardView.class));
+                startActivity(new Intent(getApplicationContext(), ChooserActivity.class));
             }
         }.start();
     }

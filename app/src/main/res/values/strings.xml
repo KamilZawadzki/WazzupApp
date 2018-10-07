@@ -6,5 +6,16 @@
     <string name="shareChooserText">Udostępnij przez:</string>
     <string name="LikeGDAK">Polub nas na Facebook</string>
     <string name="SubWazzup">Subskrybuj Wazzup\'a!</string>
+    <string name="STASIO">STASIO</string>
+    <string name="LYSY">ŁYSY</string>
+    <string name="GIENEK">GIENEK</string>
+    <string name="POLICJANT">POLICJANT</string>
+    <string name="RAFALEK">RAFAŁEK</string>
     <string name="LikeWazzup">Polub Wazzup na Facebook</string>
+    <string name="chooser_text_main">SZKOŁA \nDRUCIARSTWA</string>
+    <string name="contentDescription_gdakLogo">Logo Twórców Aplikacji</string>
+    <string name="app_banner_icon">App Icon</string>
+    <string name="youtube_icon">youtube_icon</string>
+    <string name="fb_icon">fb_icon</string>
+    <string name="smartphone_gdak_logo">LogoGdak</string>
 </resources>

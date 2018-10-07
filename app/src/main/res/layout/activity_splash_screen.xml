@@ -10,22 +10,13 @@
 
     <ImageView
         android:id="@+id/imageView"
-<<<<<<< HEAD
         android:layout_width="wrap_content"
         android:layout_height="523dp"
-=======
-        android:layout_width="154dp"
-        android:layout_height="122dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="32dp"
->>>>>>> faee18db4f86707f8a2744cc04889348a50e3f93
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.831"
         app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/contentDescription_gdakLogo"
         app:srcCompat="@drawable/gdak_logo" />
 </android.support.constraint.ConstraintLayout>

@@ -112,9 +112,6 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
                 null, // g. order by
                 null); // h. limit
 
-        if (cursor.moveToFirst())
-            return true;
-        else
-            return false;
+        return cursor.moveToFirst();
     }
 }

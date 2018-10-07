@@ -8,7 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:textColor">@color/textColor</item>
+       <!-- <item name="android:fontFamily">@font/vacerserifboldpersonal</item>-->
         <!--<item name="android:background">#ffffff</item>-->
+
     </style>
 
     <style name="layout_horizontal">
