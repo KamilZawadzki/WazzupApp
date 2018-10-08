@@ -32,7 +32,10 @@ import java.io.InputStream;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class WholeContent extends AppCompatActivity {
@@ -41,6 +44,9 @@ public class WholeContent extends AppCompatActivity {
     private TextView bannerText;
     private ImageView bannerImage;
     private static boolean showFav = false;
+
+    private Map <String,String> mapForRawFiles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +57,15 @@ public class WholeContent extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).hide();
         }
+
+        mapForRawFiles =  new HashMap<>();
+        mapForRawFiles.put("ŁYSY","lysy");
+        mapForRawFiles.put("WazzupApp","other");
+        mapForRawFiles.put("GIENEK","gienek");
+        mapForRawFiles.put("STASIO","stasio");
+        mapForRawFiles.put("RAFAŁEK","rafalek");
+        mapForRawFiles.put("POLICJANT","policjant");
+
         //zainicjuj baze
         db = new SQLiteDatabaseHandler(this);
         bannerText = findViewById(R.id.bannerTxt);
@@ -63,12 +78,14 @@ public class WholeContent extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showFav = !showFav;
-                startActivity(new Intent(getApplicationContext(),WholeContent.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                Intent goToFavourites = new Intent(getApplicationContext(),WholeContent.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                goToFavourites.putExtra("buttonid","Ulubione");
+                startActivity(goToFavourites);
             }
         });
 
         //ZAINICJUJ MEDIA PLAYER
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oh_shit);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.other_tuning_luksusowy);
         generateSoundPlayingButtonsFromRawDirectoryFiles();
 
         ImageButton likeGdakBtn = findViewById(R.id.likeGDAK_img);
@@ -98,6 +115,8 @@ public class WholeContent extends AppCompatActivity {
         });
     }
 
+
+    //TODO dodać pozostałe obrazy postaci i ustawić ich aktualizowanie
     private void getExtras() {
         Bundle extras = getIntent().getExtras();
         String extrasText = (extras == null) ? getString(R.string.app_name) :  extras.getString("buttonid");
@@ -120,11 +139,12 @@ public class WholeContent extends AppCompatActivity {
         else{
             tracks = db.allTracks();
         }
+        tracks = filterTracks(tracks);
         for (Track track : tracks) {
             String btn_name = track.getName();
             //Log.i("Raw Asset: ", fields[count].getName());
             ImageButton addToFavoritesButton = new ImageButton(this);
-            if(db.isTrackFav(btn_name)){
+            if(db.isTrackFav(mapForRawFiles.get(bannerText.getText())+"_"+btn_name)){
                 addToFavoritesButton.setImageResource(R.drawable.ic_favourite_full);
             }else
             {
@@ -154,16 +174,16 @@ public class WholeContent extends AppCompatActivity {
             params.setMargins(40, 80, 40, 0);
             soundBtn.setLayoutParams(params);
 
-
-
+            //TODO Obsługa ulubionych
             addToFavoritesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageButton imageButton = (ImageButton) v;
                     Drawable drawable = imageButton.getDrawable();
-                    String name = soundBtn.getText().toString().replaceAll(" ", "_");
+                    String name = mapForRawFiles.get(bannerText.getText()) + "_" +soundBtn.getText().toString().replaceAll(" ", "_");
                     if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.ic_favourite).getConstantState())){
                         Track newFavouriteTrack = new Track();
+
                         newFavouriteTrack.setName(name);
                         db.addTrack(newFavouriteTrack);
                         Toast.makeText(getApplicationContext(),"Fav added",Toast.LENGTH_SHORT).show();
@@ -182,7 +202,7 @@ public class WholeContent extends AppCompatActivity {
                 public void onClick(View v) {
                     Button b = (Button) v;
                     String buttonText = b.getText().toString();
-                    buttonText = buttonText.replaceAll(" ", "_").toLowerCase();
+                    buttonText = mapForRawFiles.get(bannerText.getText())+"_"+buttonText.replaceAll(" ", "_").toLowerCase();
                     int resID = getResources().getIdentifier(buttonText, "raw", getPackageName());
                     mediaPlayer.reset();
                     mediaPlayer = MediaPlayer.create(getApplicationContext(), resID);
@@ -208,7 +228,7 @@ public class WholeContent extends AppCompatActivity {
                             != PackageManager.PERMISSION_GRANTED) { //brak uprawnień dostępu do plików
                         Toast.makeText(getApplicationContext(), "Aby móc udostępniać pliki zmień uprawnienia aplikacji: Ustawienia -> Aplikacje -> WazzupApp -> Zezwolenia", Toast.LENGTH_LONG).show();
                     } else { //udostępnij plik
-                        int resID = getResources().getIdentifier(soundBtn.getText().toString().replaceAll(" ", "_"), "raw", getPackageName());
+                        int resID = getResources().getIdentifier(mapForRawFiles.get(bannerText.getText())+"_"+soundBtn.getText().toString().replaceAll(" ", "_"), "raw", getPackageName());
                         InputStream inputStream;
                         FileOutputStream fileOutputStream;
                         try {
@@ -250,6 +270,24 @@ public class WholeContent extends AppCompatActivity {
         }
     }
 
+    private List<Track> filterTracks(List<Track> alltracks) {
+        List<Track> filteredTracks = new ArrayList<>();
+        for (Track track: alltracks) {
+            String splitArray[] = track.getName().split("_");
+            if(splitArray[0].equals(mapForRawFiles.get(bannerText.getText()))||bannerText.getText().equals("Ulubione")){
+                Track filteredTrack = track;
+                String filteredName = "";
+                for(int i =1; i<splitArray.length;i++){
+                    filteredName+=splitArray[i]+"_";
+                }
+                filteredName = filteredName.substring(0, filteredName.length() - 1);
+                filteredTrack.setName(filteredName);
+                filteredTracks.add(track);
+            }
+        }
+        return filteredTracks;
+    }
+
     private List<Track> convertFieldsToList(Field[] fields) {
         List<Track> tracks = new ArrayList<>();
         for(Field field : fields){
@@ -263,7 +301,7 @@ public class WholeContent extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.oh_shit);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.other_gdzie_trytytki);
     }
 
     @Override
