@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="@drawable/bg"
+        android:background="@drawable/dashes"
         android:weightSum="10"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -49,22 +49,59 @@
 
         </LinearLayout>
         </android.support.v7.widget.CardView>
+
+        <GridLayout
+            android:id="@+id/gridFav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:alignmentMode="alignMargins"
+            android:columnCount="1"
+            android:columnOrderPreserved="false"
+            android:padding="14dp"
+            android:rowCount="1">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/favouritesCV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:cardPreventCornerOverlap="true">
+
+                <TextView
+                    android:id="@+id/favouritesTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:fontFamily="@font/opensansbold"
+                    android:text="U L U B I O N E"
+                    android:textSize="16sp" />
+            </android.support.v7.widget.CardView>
+        </GridLayout>
         <GridLayout
             android:layout_marginTop="5dp"
             android:id="@+id/mainGrid"
             android:columnCount="2"
-            android:rowCount="3"
+            android:rowCount="4"
             android:alignmentMode="alignMargins"
             android:columnOrderPreserved="false"
-            android:layout_weight="8"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:padding="14dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:paddingBottom="14dp"
             >
 
             <!-- Row 1 -->
 
             <!-- Column 1 -->
+
             <android.support.v7.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -78,19 +115,20 @@
                 app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
+                    android:layout_margin="10dp"
                     android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/imgBtnStasio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/STASIO"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/stasio" />
+                        android:background="@drawable/stasio_anim"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/STASIO" />
 
                 </LinearLayout>
 
@@ -115,13 +153,15 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <ImageButton
                         android:id="@+id/imgBtnRafalek"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/RAFALEK"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/rafalek" />
+                        android:background="@drawable/rafalek_anim"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/RAFALEK" />
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -143,19 +183,20 @@
                 >
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/imgBtnGeniu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:contentDescription="@string/GIENEK"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/gieniu" />
+                        android:background="@drawable/gieniu_anim"
+                        android:scaleType="fitCenter"/>
 
                 </LinearLayout>
 
@@ -176,17 +217,19 @@
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
+                    android:layout_margin="10dp"
                     android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
                     <ImageButton
                         android:id="@+id/imgBtnLysy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/LYSY"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/lysy" />
+                        android:background="@drawable/lysy_anim"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@string/LYSY" />
 
                 </LinearLayout>
 
@@ -209,19 +252,23 @@
                 >
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/imgBtnPolicjant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/POLICJANT"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/policjant" />
+                        android:layout_weight="1"
+
+                        android:background="@drawable/policjant_anim"
+                        android:contentDescription="@string/POLICJANT"
+                        android:scaleType="fitCenter" />
+
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -241,17 +288,19 @@
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="16dp"
+                    android:layout_margin="10dp"
                     android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
                     <ImageButton
                         android:id="@+id/imgBtnWholeContent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/app_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/lysy" />
+                        android:background="@drawable/other_2"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter" />
 
                 </LinearLayout>
 

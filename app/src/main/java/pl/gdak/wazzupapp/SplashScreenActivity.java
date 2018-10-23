@@ -1,19 +1,21 @@
 package pl.gdak.wazzupapp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.Objects;
 
 public class SplashScreenActivity extends AppCompatActivity {
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -29,17 +31,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         loading_app();
     }
     private void loading_app() {
-        new CountDownTimer(2000, 10) {
+        new CountDownTimer(2500, 10) {
             @Override
             public void onTick(long millisUntilFinished) {
-//                progress = progress + 1;
-//                progressBar.setProgress(progress);
             }
 
             @Override
             public void onFinish() {
-
-
                 startActivity(new Intent(getApplicationContext(), ChooserActivity.class));
             }
         }.start();

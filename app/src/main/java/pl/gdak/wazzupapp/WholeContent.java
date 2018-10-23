@@ -1,8 +1,14 @@
 package pl.gdak.wazzupapp;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -10,10 +16,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,7 +56,9 @@ public class WholeContent extends AppCompatActivity {
     private static boolean showFav = false;
 
     private Map <String,String> mapForRawFiles;
+    private List<Sounds> allOfSongs;
 
+    private int STORAGE_PERMISSION_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +69,7 @@ public class WholeContent extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).hide();
         }
-
+        allOfSongs = new ArrayList<>();
         mapForRawFiles =  new HashMap<>();
         mapForRawFiles.put("ŁYSY","lysy");
         mapForRawFiles.put("WazzupApp","other");
@@ -65,6 +77,8 @@ public class WholeContent extends AppCompatActivity {
         mapForRawFiles.put("STASIO","stasio");
         mapForRawFiles.put("RAFAŁEK","rafalek");
         mapForRawFiles.put("POLICJANT","policjant");
+        mapForRawFiles.put("ULUBIONE","");
+
 
         //zainicjuj baze
         db = new SQLiteDatabaseHandler(this);
@@ -73,16 +87,27 @@ public class WholeContent extends AppCompatActivity {
         getExtras();
 
 
-        Button changeSourceButtons = findViewById(R.id.changeSourceButtons);
-        changeSourceButtons.setOnClickListener(new View.OnClickListener() {
+
+
+       /* changeSourceButtons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFav = !showFav;
-                Intent goToFavourites = new Intent(getApplicationContext(),WholeContent.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                goToFavourites.putExtra("buttonid","Ulubione");
-                startActivity(goToFavourites);
+                if(!showFav){
+                    Intent goToChooser = new Intent(getApplicationContext(),ChooserActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(goToChooser);
+
+                }else{
+                    Intent goToFavourites = new Intent(getApplicationContext(),WholeContent.class).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    goToFavourites.putExtra("buttonid","Ulubione");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            startActivity(goToFavourites,ActivityOptions.makeSceneTransitionAnimation(WholeContent.this).toBundle());
+                    }else{
+                        startActivity(goToFavourites);
+                    }
+                }
             }
-        });
+        });*/
 
         //ZAINICJUJ MEDIA PLAYER
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.other_tuning_luksusowy);
@@ -120,14 +145,29 @@ public class WholeContent extends AppCompatActivity {
     private void getExtras() {
         Bundle extras = getIntent().getExtras();
         String extrasText = (extras == null) ? getString(R.string.app_name) :  extras.getString("buttonid");
+        Boolean isFav = (extras == null) ? false : extras.getBoolean("FAV");
         if(!extrasText.equals(getString(R.string.app_name))){
             switch (extrasText){
                 case "GIENEK":
-                    bannerImage.setBackgroundResource(R.drawable.gienek);
+                    bannerImage.setBackgroundResource(R.drawable.gieniu_anim_1);
+                    break;
+                case "POLICJANT":
+                    bannerImage.setBackgroundResource(R.drawable.policjant_anim_1);
+                    break;
+                case "STASIO":
+                    bannerImage.setBackgroundResource(R.drawable.stasio_anim_1);
+                    break;
+                case "RAFAŁEK":
+                    bannerImage.setBackgroundResource(R.drawable.rafalek_anim_1);
+                    break;
+                case "ŁYSY":
+                    bannerImage.setBackgroundResource(R.drawable.lysy_anim_1);
                     break;
             }
         }
         bannerText.setText(extrasText);
+        if(isFav)
+            showFav = isFav;
     }
 
     public void generateSoundPlayingButtonsFromRawDirectoryFiles() {
@@ -142,13 +182,21 @@ public class WholeContent extends AppCompatActivity {
         tracks = filterTracks(tracks);
         for (Track track : tracks) {
             String btn_name = track.getName();
-            //Log.i("Raw Asset: ", fields[count].getName());
+            Log.i("BTN_NAME: ", btn_name);
             ImageButton addToFavoritesButton = new ImageButton(this);
-            if(db.isTrackFav(mapForRawFiles.get(bannerText.getText())+"_"+btn_name)){
-                addToFavoritesButton.setImageResource(R.drawable.ic_favourite_full);
-            }else
-            {
-                addToFavoritesButton.setImageResource(R.drawable.ic_favourite);
+            if(bannerText.getText().equals("Ulubione")){
+                if(db.getFavouriteTrackName("_"+btn_name)!=null){
+                    addToFavoritesButton.setImageResource(R.drawable.ic_favourite_full);
+                }else{
+                    addToFavoritesButton.setImageResource(R.drawable.ic_favourite);
+                }
+            }else{
+                if(db.isTrackFav(mapForRawFiles.get(bannerText.getText())+"_"+btn_name)){
+                    addToFavoritesButton.setImageResource(R.drawable.ic_favourite_full);
+                }else
+                {
+                    addToFavoritesButton.setImageResource(R.drawable.ic_favourite);
+                }
             }
 
             LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 2);
@@ -162,9 +210,10 @@ public class WholeContent extends AppCompatActivity {
             //PlaySound Button
             Typeface font = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                font = getResources().getFont(R.font.vacerseriffatpersonal);
+                font = getResources().getFont(R.font.opensanssemibold);
             }
             final Button soundBtn = new Button(this);
+
             soundBtn.setText(btn_name.replaceAll("_", " "));
             soundBtn.setTypeface(font);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -180,18 +229,45 @@ public class WholeContent extends AppCompatActivity {
                 public void onClick(View v) {
                     ImageButton imageButton = (ImageButton) v;
                     Drawable drawable = imageButton.getDrawable();
-                    String name = mapForRawFiles.get(bannerText.getText()) + "_" +soundBtn.getText().toString().replaceAll(" ", "_");
+                    String name;
+                    if(bannerText.getText().equals("Ulubione")){
+                        name = db.getFavouriteTrackName("_" +soundBtn.getText().toString().replaceAll(" ", "_"));
+                        Toast.makeText(getApplicationContext(),name,Toast.LENGTH_LONG);
+                    }
+                    else{
+                        name = mapForRawFiles.get(bannerText.getText()) + "_" +soundBtn.getText().toString().replaceAll(" ", "_");
+                    }
                     if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.ic_favourite).getConstantState())){
                         Track newFavouriteTrack = new Track();
 
                         newFavouriteTrack.setName(name);
+                        Log.i("BTN_NAME_SAVE: ", name);
                         db.addTrack(newFavouriteTrack);
-                        Toast.makeText(getApplicationContext(),"Fav added",Toast.LENGTH_SHORT).show();
                         imageButton.setImageResource(R.drawable.ic_favourite_full);
                     }else
                     {
                         db.deleteOne(name);
                         imageButton.setImageResource(R.drawable.ic_favourite);
+                        if(bannerText.getText().equals("Ulubione")){
+                            for (Sounds hideThisElement: allOfSongs) {
+                                if (hideThisElement.getAddToFavBtn()==imageButton) {
+                                    final LinearLayout hideThisLayout = hideThisElement.getEachHorizontal();
+                                    hideThisLayout.animate()
+                                            .translationY(hideThisLayout.getHeight())
+                                            .alpha(0.0f)
+                                            .setDuration(300)
+                                            .setListener(new AnimatorListenerAdapter() {
+                                                @Override
+                                                public void onAnimationEnd(Animator animation) {
+                                                    super.onAnimationEnd(animation);
+                                                    hideThisLayout.setVisibility(View.GONE);
+                                                }
+                                            });
+                                    break;
+                                }
+
+                            }
+                        }
                     }
                 }
             });
@@ -202,7 +278,13 @@ public class WholeContent extends AppCompatActivity {
                 public void onClick(View v) {
                     Button b = (Button) v;
                     String buttonText = b.getText().toString();
-                    buttonText = mapForRawFiles.get(bannerText.getText())+"_"+buttonText.replaceAll(" ", "_").toLowerCase();
+                    if(bannerText.getText().equals("Ulubione")){
+                        buttonText = db.getFavouriteTrackName("_"+buttonText.replaceAll(" ", "_").toLowerCase());
+                    }
+                    else
+                    {
+                        buttonText = mapForRawFiles.get(bannerText.getText())+"_"+buttonText.replaceAll(" ", "_").toLowerCase();
+                    }
                     int resID = getResources().getIdentifier(buttonText, "raw", getPackageName());
                     mediaPlayer.reset();
                     mediaPlayer = MediaPlayer.create(getApplicationContext(), resID);
@@ -224,11 +306,16 @@ public class WholeContent extends AppCompatActivity {
             shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) { //brak uprawnień dostępu do plików
-                        Toast.makeText(getApplicationContext(), "Aby móc udostępniać pliki zmień uprawnienia aplikacji: Ustawienia -> Aplikacje -> WazzupApp -> Zezwolenia", Toast.LENGTH_LONG).show();
-                    } else { //udostępnij plik
-                        int resID = getResources().getIdentifier(mapForRawFiles.get(bannerText.getText())+"_"+soundBtn.getText().toString().replaceAll(" ", "_"), "raw", getPackageName());
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        String name;
+                        if(bannerText.getText().equals("Ulubione")){
+                            name = db.getFavouriteTrackName("_"+soundBtn.getText().toString().replaceAll(" ", "_"));
+                        }
+                        else {
+                            name = mapForRawFiles.get(bannerText.getText())+"_"+soundBtn.getText().toString().replaceAll(" ", "_");
+                        }
+                        int resID = getResources().getIdentifier(name, "raw", getPackageName());
                         InputStream inputStream;
                         FileOutputStream fileOutputStream;
                         try {
@@ -255,7 +342,16 @@ public class WholeContent extends AppCompatActivity {
                         shareAudioIntent.putExtra(Intent.EXTRA_STREAM,
                                 Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/SoundFromWazzupApp.mp3"));
                         startActivity(Intent.createChooser(shareAudioIntent, getString(R.string.shareChooserText)));
+
+                    } else {
+                        requestStoragePermission();
                     }
+               /*     if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) { //brak uprawnień dostępu do plików
+                        Toast.makeText(getApplicationContext(), "Aby móc udostępniać pliki zmień uprawnienia aplikacji: Ustawienia -> Aplikacje -> WazzupApp -> Zezwolenia", Toast.LENGTH_LONG).show();
+                    } else { //udostępnij plik
+
+                    }*/
                 }
             });
 
@@ -265,6 +361,8 @@ public class WholeContent extends AppCompatActivity {
             eachHorizontalLayout.addView(addToFavoritesButton);
             eachHorizontalLayout.addView(soundBtn);
             eachHorizontalLayout.addView(shareButton);
+            Sounds newObject = new Sounds(eachHorizontalLayout,addToFavoritesButton);
+            allOfSongs.add(newObject);
 
             rootButtonsLayout.addView(eachHorizontalLayout, 0);
         }
@@ -308,5 +406,51 @@ public class WholeContent extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mediaPlayer.release();
+    }
+    @Override
+    public void onBackPressed() {
+       if(bannerText.getText().equals("Ulubione")){
+           showFav = false;
+       }
+        super.onBackPressed();
+    }
+
+    private void requestStoragePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Wymagane zezwolenie")
+                    .setMessage("Zezwolenie dostępu do plików jest wymagane, aby udostępnić..")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(WholeContent.this,
+                                    new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+                        }
+                    })
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == STORAGE_PERMISSION_CODE)  {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Nadano uprawnienia.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Nie uzyskano dostępu.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

@@ -114,4 +114,12 @@ public class SQLiteDatabaseHandler extends SQLiteOpenHelper {
 
         return cursor.moveToFirst();
     }
+
+    public String getFavouriteTrackName(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT name FROM "+TABLE_NAME+" WHERE name LIKE \'%"+name+"\'";
+        Cursor cursor = db.rawQuery(query, null);
+
+        return (cursor.moveToFirst()) ? cursor.getString(0) : null;
+    }
 }
