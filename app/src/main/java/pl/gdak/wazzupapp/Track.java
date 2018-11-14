@@ -1,6 +1,6 @@
 package pl.gdak.wazzupapp;
 
-public class Track {
+class Track {
     private String name;
 
     public String getName() {

@@ -1,24 +1,17 @@
 package pl.gdak.wazzupapp;
 
-import android.Manifest;
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import java.util.Objects;
 
 public class ChooserActivity extends AppCompatActivity  {
-    ImageButton StasioBtn,RafalekBtn,GeniuBtn,LysyBtn,PolicjantBtn,WholeContentBtn;
 
     private View.OnClickListener awesomeOnClickListener = new View.OnClickListener() {
         @Override
@@ -39,7 +32,6 @@ public class ChooserActivity extends AppCompatActivity  {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).hide();
         }
-
       /*  if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -47,19 +39,19 @@ public class ChooserActivity extends AppCompatActivity  {
         }*/
 
 
-        StasioBtn = findViewById(R.id.imgBtnStasio);
-        RafalekBtn = findViewById(R.id.imgBtnRafalek);
-        LysyBtn = findViewById(R.id.imgBtnLysy);
-        PolicjantBtn = findViewById(R.id.imgBtnPolicjant);
-        WholeContentBtn = findViewById(R.id.imgBtnWholeContent);
-        GeniuBtn = findViewById(R.id.imgBtnGeniu);
+        ImageButton stasioBtn = findViewById(R.id.imgBtnStasio);
+        ImageButton rafalekBtn = findViewById(R.id.imgBtnRafalek);
+        ImageButton lysyBtn = findViewById(R.id.imgBtnLysy);
+        ImageButton policjantBtn = findViewById(R.id.imgBtnPolicjant);
+        ImageButton wholeContentBtn = findViewById(R.id.imgBtnWholeContent);
+        ImageButton geniuBtn = findViewById(R.id.imgBtnGeniu);
 
-        StasioBtn.setOnClickListener(awesomeOnClickListener);
-        RafalekBtn.setOnClickListener(awesomeOnClickListener);
-        LysyBtn.setOnClickListener(awesomeOnClickListener);
-        PolicjantBtn.setOnClickListener(awesomeOnClickListener);
-        WholeContentBtn.setOnClickListener(awesomeOnClickListener);
-        GeniuBtn.setOnClickListener(awesomeOnClickListener);
+        stasioBtn.setOnClickListener(awesomeOnClickListener);
+        rafalekBtn.setOnClickListener(awesomeOnClickListener);
+        lysyBtn.setOnClickListener(awesomeOnClickListener);
+        policjantBtn.setOnClickListener(awesomeOnClickListener);
+        wholeContentBtn.setOnClickListener(awesomeOnClickListener);
+        geniuBtn.setOnClickListener(awesomeOnClickListener);
 
         CardView favourites = findViewById(R.id.favouritesCV);
         favourites.setOnClickListener(new View.OnClickListener() {

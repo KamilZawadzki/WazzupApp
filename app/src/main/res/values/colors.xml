@@ -5,4 +5,12 @@
     <color name="colorAccent">#670023</color>
     <color name="textColorPrimary">#670023</color>
     <color name="textColor">#000000</color>
+    <color name="bluedark">#2f333f</color>
+    <color name="bluelight">#f4a629</color>
+   <!-- #49acd5-->
+    <color name="green">#45bc62</color>
+    <color name="orange">#eaad43</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="darkerbluedark">#1e212b</color>
 </resources>

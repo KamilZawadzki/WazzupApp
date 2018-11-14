@@ -20,7 +20,6 @@
         app:srcCompat="@drawable/appbanner" />
 
     <ImageView
-        android:id="@+id/imageView3"
         android:layout_width="248dp"
         android:layout_height="129dp"
         android:layout_marginTop="8dp"
@@ -30,7 +29,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/gdak_napis" />
+        app:srcCompat="@drawable/gdak_napis"
+        android:contentDescription="@string/contentDescription_gdakLogo" />
 
     <ProgressBar
         android:id="@+id/progressBar"
